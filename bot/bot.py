@@ -39,6 +39,13 @@ from telegram.ext import (
     filters,
 )
 
+# Load environment variables
+load_dotenv()
+
+# Get onboarding URLs from environment variables
+LOCAL_ONBOARDING_URL = os.getenv("LOCAL_ONBOARDING_URL", "http://localhost:3000")
+BASE_ONBOARDING_URL = os.getenv("BASE_ONBOARDING_URL", "https://easterok.github.io/telegram-onboarding-kit")
+
 
 # region: helper functions
 def get_user_data(user: User) -> Dict[str, Any]:
@@ -81,10 +88,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     reply_markup = ReplyKeyboardMarkup.from_column(
         [
             KeyboardButton(
+                text="🏠 Local Onboarding",
+                web_app=WebAppInfo(
+                    url=add_get_params_to_url(LOCAL_ONBOARDING_URL, user_data)
+                ),
+            ),
+            KeyboardButton(
                 text="🌈 Base Onboarding",
                 web_app=WebAppInfo(
                     url=add_get_params_to_url(
-                        "https://easterok.github.io/telegram-onboarding-kit", user_data
+                        BASE_ONBOARDING_URL, user_data
                     )
                 ),
             ),
@@ -361,10 +374,17 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     error = context.error
 
     text = f"🥲 Some error happened...\n" f"<b>Error:</b> {error}"
-    await update.effective_message.reply_text(
-        text=text,
-        parse_mode=ParseMode.HTML,
-    )
+    
+    # Перевіряємо, чи є effective_message
+    if update and update.effective_message:
+        await update.effective_message.reply_text(
+            text=text,
+            parse_mode=ParseMode.HTML,
+        )
+    else:
+        # Якщо немає effective_message, виводимо помилку в консоль
+        print(f"Error occurred: {error}")
+        print(f"Update object: {update}")
 
     raise error
 

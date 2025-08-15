@@ -9,7 +9,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  actions: read         # потрібно для deploy-pages@v4
 
 concurrency:
   group: "pages"
@@ -35,15 +34,18 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./app
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit --no-fund
 
-      - name: Build
+      - name: Build (project pages base)
         working-directory: ./app
-        run: npm run build
-        # ВАЖЛИВО: у vite.config.js/ts має бути base: "/${{ github.event.repository.name }}/"
+        run: npm run build -- --base="/${{ github.event.repository.name }}/"
+        # Якщо custom domain або user/org pages, заміни на: --base="/"
 
       - name: Create 404.html for SPA
         run: cp ./app/dist/index.html ./app/dist/404.html
+
+      - name: Add .nojekyll
+        run: touch ./app/dist/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

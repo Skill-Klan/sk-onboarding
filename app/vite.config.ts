@@ -5,9 +5,11 @@ import svgLoader from 'vite-svg-loader';
 import { telegramStickerLoader } from './_internal/tgs.loader';
 
 export default defineConfig({
+  // Для локального тестування використовуємо кореневий шлях
+  base: '/',
   // Якщо це репозиторна Pages:
   // !!! заміни <repo-name> на точну назву репозиторію і залиш завершаючий слеш
-  base: '/<repo-name>/',
+  // base: '/<repo-name>/',
   // Якщо це user/org pages або custom domain — заміни на '/'
   // base: '/',
 
