@@ -21,6 +21,10 @@ from dotenv import load_dotenv
 # Disable SSL warnings for self-signed certificates
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# Disable SSL verification globally for python-telegram-bot
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 from telegram import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
