@@ -27,9 +27,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: app/package-lock.json   # FIX
 
       - name: Install dependencies
+        working-directory: ./app                        # FIX
         run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: Build (project pages base)
@@ -67,6 +68,12 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Validate secrets (no output)
+        run: |
+          [[ -n "${{ secrets.SERVER_HOST }}" ]] || { echo "SERVER_HOST is empty"; exit 1; }
+          [[ -n "${{ secrets.SERVER_USER }}" ]] || { echo "SERVER_USER is empty"; exit 1; }
+          [[ -n "${{ secrets.SERVER_PORT }}" && "${{ secrets.SERVER_PORT }}" =~ ^[0-9]+$ ]] || { echo "SERVER_PORT must be a number"; exit 1; }
+
       - name: Add server to known hosts
         run: |
           mkdir -p ~/.ssh
@@ -75,9 +82,9 @@ jobs:
       - name: Ensure remote directories
         run: |
           ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
-            set -e
+            set -euo pipefail
             sudo -n mkdir -p /opt/telegram-bot/bot
-            sudo -n chown -R $USER:$USER /opt/telegram-bot
+            sudo -n chown -R "$(id -un)":"$(id -gn)" /opt/telegram-bot
           '
 
       - name: Rsync bot sources
