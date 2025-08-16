@@ -14,7 +14,7 @@ mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 
 # Додайте публічний ключ (скопіюйте знизу)
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDVf2/YPT9Ag04gFgd1xFDuT+/4jLP0Iu7eF81c51jQr7XcpUUgPHiqV0ueMjSF1UG8O597h4AnRz87kni4a6MhSgkgL/FpMBDKwmffGqysBwo75jz0cFV/t5Jkn1kVZz3aMukn3sRes9TQaR596gfiMe0t7VNXtnulKFWXKljGLT8q49SHw0qureSzgGkJ/YtwyJAoUK1qtJBPq8XAZ/YSdLNi/g2TIfh9VQSum4TPnset+Rh7rPe/tkyIBYXv1FXyTrxChtfpWzgOAVPrPzWcDZ1tJm8yt72T7L+1weLx+ApCy1PGtv+/g2L/gSz1gPlys9ZOC0hFNczpJhf6/Qxls5VU7o5MwuolnllKgnDcNIhhAK4awZ7Us7e4GCv/IPJm8dr02yH9TgmqvngIe2PneIVWs1lnx5zuo/tXHi7F0ihaRkF2SgWkPH/5Km5HR5DB2g/B37oJUsQbasxPwBAvOtq5wS93JM+h+Xb0aERyPFLO1Lf/J/fY7nSrgQA0vj5y85lF6Fmvq3F4A1KzuoRGJcJ1U2ZP/J8ShXiLfrF7dBCJuIhpBUKdwHugmxp5l6UGNvpC9m0/cO4uLHoTSAjO2JO9geYPDRZhsxmxd6I+FySvbq4IEz4QtOsZ4ggBrEips/+soeAzJOok7k7qJYgYvzhZAc9WGAr8KlKD3MoJKQ== github-actions@telegram-bot" >> ~/.ssh/authorized_keys
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHcUryBl6naiT2gXetBSfgg/MbHnOU+l4IdODyCg8txD github-actions@telegram-bot" >> ~/.ssh/authorized_keys
 
 # Встановіть правильні права
 chmod 600 ~/.ssh/authorized_keys
@@ -32,7 +32,7 @@ ls -la ~/.ssh/authorized_keys
    - `SSH_PRIVATE_KEY` = вміст ~/.ssh/github-actions
    - `SERVER_HOST` = 37.57.209.201
    - `SERVER_USER` = roman
-   - `SERVER_PORT` = 22
+   - `SERVER_PORT` = 2222
 
 2. **Перезапустіть failed workflow** або зробіть новий push
 
