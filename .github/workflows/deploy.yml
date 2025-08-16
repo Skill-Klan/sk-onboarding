@@ -11,29 +11,8 @@ permissions:
   id-token: write
 
 jobs:
-  changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    outputs:
-      app: ${{ steps.filter.outputs.app }}
-      bot: ${{ steps.filter.outputs.bot }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Paths filter
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            app:
-              - 'app/**'
-            bot:
-              - 'bot/**'
-
   deploy-app:
     name: Deploy to GitHub Pages
-    needs: changes
-    if: needs.changes.outputs.app == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -77,8 +56,6 @@ jobs:
 
   deploy-bot:
     name: Deploy Telegram Bot to Server
-    needs: changes
-    if: needs.changes.outputs.bot == 'true'
     runs-on: ubuntu-latest
 
     steps:
