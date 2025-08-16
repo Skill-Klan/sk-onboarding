@@ -27,10 +27,9 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: ./app
         run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: Build (project pages base)
@@ -68,12 +67,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Validate secrets
-        run: |
-          [[ -n "${{ secrets.SERVER_HOST }}" ]] || { echo "SERVER_HOST is empty"; exit 1; }
-          [[ -n "${{ secrets.SERVER_USER }}" ]] || { echo "SERVER_USER is empty"; exit 1; }
-          [[ -n "${{ secrets.SERVER_PORT }}" && "${{ secrets.SERVER_PORT }}" =~ ^[0-9]+$ ]] || { echo "SERVER_PORT must be a number"; exit 1; }
-
       - name: Add server to known hosts
         run: |
           mkdir -p ~/.ssh
@@ -81,37 +74,53 @@ jobs:
 
       - name: Ensure remote directories
         run: |
-          ssh -o BatchMode=yes -o IdentitiesOnly=yes -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
-            set -euo pipefail
+          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+            set -e
             sudo -n mkdir -p /opt/telegram-bot/bot
-            sudo -n chown -R "$(id -un)":"$(id -gn)" /opt/telegram-bot
+            sudo -n chown -R $USER:$USER /opt/telegram-bot
           '
 
       - name: Rsync bot sources
         run: |
-          rsync -avz --delete -e "ssh -o BatchMode=yes -o IdentitiesOnly=yes -p ${{ secrets.SERVER_PORT }}" \
+          rsync -avz --delete -e "ssh -p ${{ secrets.SERVER_PORT }}" \
             --exclude=".git" \
             --exclude="node_modules" \
             bot/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/opt/telegram-bot/bot/
 
-      - name: Install Python deps & restart service
+      - name: Install deps (auto-detect runtime) & restart service
         run: |
-          ssh -o BatchMode=yes -o IdentitiesOnly=yes -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
             set -euo pipefail
             cd /opt/telegram-bot/bot
 
-            if [ ! -d venv ]; then
-              python3 -m venv venv
-            fi
-            . venv/bin/activate
-            python3 -V
-            pip -V
-            pip install --upgrade pip
-            if [ -f requirements.txt ]; then
+            PY_REQ="requirements.txt"
+            NODE_PKG="package.json"
+
+            if [ -f "$PY_REQ" ] && [ -f "$NODE_PKG" ]; then
+              echo "Both $PY_REQ and $NODE_PKG exist. Ambiguous runtime. Abort."
+              exit 1
+            elif [ -f "$PY_REQ" ]; then
+              echo "Detected Python bot. Preparing venv and installing deps..."
+              if [ ! -d "venv" ]; then
+                python3 -m venv venv
+              fi
+              . venv/bin/activate
+              pip install --upgrade pip
               pip install -r requirements.txt
+            elif [ -f "$NODE_PKG" ]; then
+              echo "Detected Node.js bot. Installing deps..."
+              if [ -f package-lock.json ]; then
+                npm ci --omit=dev --no-audit --no-fund
+              else
+                npm i --omit=dev --no-audit --no-fund
+              fi
+            else
+              echo "No requirements.txt or package.json found. Nothing to install."
             fi
 
+            echo "Restarting service: telegram-bot"
             sudo -n systemctl restart telegram-bot
             systemctl is-active --quiet telegram-bot && echo "Service is active"
-            journalctl -u telegram-bot -n 80 --no-pager || true
+            echo "--- Recent logs ---"
+            journalctl -u telegram-bot -n 40 --no-pager || true
           '
