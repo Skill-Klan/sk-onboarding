@@ -83,6 +83,7 @@ import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ref, computed, watch, onMounted } from 'vue';
 import MarkdownRenderer from './MarkdownRenderer.vue';
+import { i18n } from 'vue-i18n';
 
 const router = useRouter();
 const { t } = useI18n();
@@ -152,11 +153,11 @@ const loadFaqData = async () => {
   error.value = null;
   
   try {
-    // Отримуємо поточну мову
-    const currentLang = 'uk'; // TODO: замінити на реальну мову з i18n
+    // Отримуємо поточну мову з i18н
+    const currentLang = 'uk'; // TODO: замінити на реальну мову з i18н
     
     // Завантажуємо дані з JSON файлу
-    const response = await fetch(`/data/faq.${currentLang}.json`);
+    const response = await fetch(`/sk-onboarding/data/faq.${currentLang}.json`);
     if (!response.ok) {
       throw new Error('Failed to load FAQ data');
     }
