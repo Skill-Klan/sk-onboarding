@@ -1,195 +1,118 @@
-# Telegram Onboarding Kit
+# 🚀 Telegram Bot + Web App - Автоматичний деплой
 
-[Telegram Onboarding Kit](https://github.com/Easterok/telegram-onboarding-kit) is a simple-to-use tool for crafting **onboardings** and **paywalls** for Telegram Bots. You can create pretty onboardings with minimal adjustments to our presets or easily create your own custom flows with our web components – thanks to **Telegram Mini Apps**.
+Цей проєкт включає Telegram бота та веб-додаток з автоматичним деплоєм через GitHub Actions.
 
-But why do you need it? Because onboarding/paywall is a **must-have attribute** of any mobile app – it offers a bright product presentation and seamless payment process. We believe Telegram Mini Apps will be used by millions of users in the future and this kit will help developers to turn their apps into real products!
+## 📁 Структура проєкту
 
-To start:
-
-- Have a look at live demo: <a href="https://t.me/onboarding_kit_demo_bot" alt="Run Demo Bot shield"><img src="https://img.shields.io/badge//start-Demo%20Bot-blue?logo=data:image/svg+xml;base64,PHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmlld0JveD0iMCAwIDI0MCAyNDAiPjxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyLWdyYWRpZW50IiB4MT0iMTIwIiB5MT0iMjQwIiB4Mj0iMTIwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMWQ5M2QyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMzhiMGUzIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHRpdGxlPlRlbGVncmFtX2xvZ288L3RpdGxlPjxjaXJjbGUgY3g9IjEyMCIgY3k9IjEyMCIgcj0iMTIwIiBmaWxsPSJ1cmwoI2xpbmVhci1ncmFkaWVudCkiLz48cGF0aCBkPSJNODEuMjI5LDEyOC43NzJsMTQuMjM3LDM5LjQwNnMxLjc4LDMuNjg3LDMuNjg2LDMuNjg3LDMwLjI1NS0yOS40OTIsMzAuMjU1LTI5LjQ5MmwzMS41MjUtNjAuODlMODEuNzM3LDExOC42WiIgZmlsbD0iI2M4ZGFlYSIvPjxwYXRoIGQ9Ik0xMDAuMTA2LDEzOC44NzhsLTIuNzMzLDI5LjA0NnMtMS4xNDQsOC45LDcuNzU0LDAsMTcuNDE1LTE1Ljc2MywxNy40MTUtMTUuNzYzIiBmaWxsPSIjYTljNmQ4Ii8+PHBhdGggZD0iTTgxLjQ4NiwxMzAuMTc4LDUyLjIsMTIwLjYzNnMtMy41LTEuNDItMi4zNzMtNC42NGMuMjMyLS42NjQuNy0xLjIyOSwyLjEtMi4yLDYuNDg5LTQuNTIzLDEyMC4xMDYtNDUuMzYsMTIwLjEwNi00NS4zNnMzLjIwOC0xLjA4MSw1LjEtLjM2MmEyLjc2NiwyLjc2NiwwLDAsMSwxLjg4NSwyLjA1NSw5LjM1Nyw5LjM1NywwLDAsMSwuMjU0LDIuNTg1Yy0uMDA5Ljc1Mi0uMSwxLjQ0OS0uMTY5LDIuNTQyLS42OTIsMTEuMTY1LTIxLjQsOTQuNDkzLTIxLjQsOTQuNDkzcy0xLjIzOSw0Ljg3Ni01LjY3OCw1LjA0M0E4LjEzLDguMTMsMCwwLDEsMTQ2LjEsMTcyLjVjLTguNzExLTcuNDkzLTM4LjgxOS0yNy43MjctNDUuNDcyLTMyLjE3N2ExLjI3LDEuMjcsMCwwLDEtLjU0Ni0uOWMtLjA5My0uNDY5LjQxNy0xLjA1LjQxNy0xLjA1czUyLjQyNi00Ni42LDUzLjgyMS01MS40OTJjLjEwOC0uMzc5LS4zLS41NjYtLjg0OC0uNC0zLjQ4MiwxLjI4MS02My44NDQsMzkuNC03MC41MDYsNDMuNjA3QTMuMjEsMy4yMSwwLDAsMSw4MS40ODYsMTMwLjE3OFoiIGZpbGw9IiNmZmYiLz48L3N2Zz4="/></a>
-- Watch tutorial: [![YouTube | Watch Tutorial](https://img.shields.io/badge/YouTube-Watch%20Tutorial-red?logo=youtube&style=social)](https://www.youtube.com/watch?v=q9R42T-7ykI)
-- And check out video demo:
-
-https://github.com/Easterok/telegram-onboarding-kit/assets/7571844/1453b3af-5c13-467a-a02d-41c3ea12e795
-
-## Features
-
-- Native support for images, videos, Telegram (.tgs) animated stickers, forms, feature lists and page navigation
-- Configurable products on paywall
-- One-click 0$ **deploy** on GitHub Pages
-- Auto adaptation to Telegram color scheme
-- **Telegram Payments** & 👛 **Wallet Pay** payment methods
-- Large library of UI components for custom builds
-- Language and currency **localization**
-- Buttons with **haptic feedback**
-- Content pre-loading for smooth user experience
-- Telegram-native design
-- Many **examples/presets** (with free-to-use [Figma project](https://www.figma.com/file/ssQqPZ2vqZhD4QF2xyCTd2/Telegram-Onboarding--ToolKit))
-- Extensive documentation with visual examples
-- MIT License (free for commercial use)
-
-## Quick Start
-
-For a quick start you can watch video tutorial: [![YouTube | Watch Tutorial](https://img.shields.io/badge/YouTube-Watch%20Tutorial-red?logo=youtube&style=social)](https://www.youtube.com/watch?v=q9R42T-7ykI)
-
-But if you prefer text:
-
-1. Fork this repository and clone it to your local machine
-2. Run command `npm ci` to install all the dependencies (make sure that you have installed `pip` and `node` on your machine)
-3. And now you're ready to run the app with `npm run dev` command
-4. To run python bot put your tokens to `bot/.env` (use `bot/example.env` as an example). Then start the bot with `npm run bot` command
-
-## Onboarding/Paywall configuration
-
-The heart of this project lies in the configuration. By tweaking the configuration file, you can customize the onboarding experience according to your project's requirements. The configuration file can be found at [config.ts](./app/src/config.ts).
-
-For detailed information on configuring the app, refer to the [Configuration Guide](./configuration-guide.md).
-
-## Integrate onboarding into your bot
-The perfect location for onboarding is right at the start of the bot. It will help you to brightly present your product to the user.
-
-To integrate onboarding to your bot, you simply need to add a **button** with a link of your deployed onboarding web application. Telegram currently supports six different ways of [launching Mini Apps](https://core.telegram.org/bots/webapps#implementing-mini-apps). For onboadring launching we recommend using [MenuButton](https://core.telegram.org/api/bots/menu) or [KeyboardButton](https://core.telegram.org/type/KeyboardButton).
-
-### MenuButton
-MenuButton is a special button which appears on the left side of the text input (see [@DurgerKingBot](https://t.me/DurgerKingBot)). This button can be configured without any server code in [@BotFather](https://t.me/BotFather):
-
-- Go to [@BotFather](https://t.me/BotFather) → `/mybots` → *Select yout bot* → `Bot Settings` → `Menu Button` → *Send your onboarding URL* → *Send button title (e.g. "Onboarding")*
-
-Now Menu Button with onboarding will appear in your bot.
-
-### KeyboardButton
-Try KeyboardButton in action in our [Demo Bot](https://t.me/onboarding_kit_demo_bot). It utilizes Telegram's [KeyboardButton](https://core.telegram.org/type/KeyboardButton) with [Mini App URL](https://core.telegram.org/constructor/keyboardButtonSimpleWebView) inside.
-
-
-Here's a snippet for `reply_markup` implemented with [python-telegram-bot](http://python-telegram-bot.readthedocs.io/) library (see full implementation in [bot.py](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py#L81)):
-```python
-reply_markup = telegram.ReplyKeyboardMarkup.from_button(
-   telegram.KeyboardButton(
-      text="🌈 Onboarding",
-      web_app=telegram.WebAppInfo(url={ONBOARDING_URL})
-   )
-)
+```
+sk-onboarding/
+├── app/                    # Веб-додаток (Vue.js + FAQ)
+├── bot/                   # Telegram бот (Python)
+├── .github/workflows/     # GitHub Actions для CI/CD
+└── packages/              # Спільні пакети
 ```
 
-Note: KeyboardButton does't send any user data to Mini App (e.g. `language_code`). But you can send all the required data with HTTP GET parameters (see [this function](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py#L51) as reference).
+## 🚀 Швидкий старт
 
-### Adding payments
-Good ending of onboarding is a **paywall**: User selects a product → Chooses payment method → Gets invoice in the chat. After the paywall the bot receives data about the selected product like:
-```json
-{
-   "title": "Title",
-   "description": "Description",
-   "price": 5.99,
-   "currency": "USD",
-   "payment_method": "wallet_pay"
-}
+### 1. Локальний запуск бота
+
+```bash
+cd bot/
+chmod +x run.sh
+./run.sh
 ```
-This data is used for ivoice generation. We implemented 2 different payment methods: native [Telegram Payments](https://core.telegram.org/bots/payments) and [👛 Wallet Pay](https://pay.wallet.tg) (but generally any payment method can be integrated into such flow). You can find full code in [bot.py](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py):
-- Telegram Payments: [[send invoice]](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py#L201) • [[check payment status]](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py#L235)
-- 👛 Wallet Pay: [[send invoice]](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py#L245) • [[check payment status]](https://github.com/Easterok/telegram-onboarding-kit/blob/main/bot/bot.py#L326)
 
+### 2. Локальний запуск веб-додатку
 
+```bash
+cd app/
+npm install
+npm run dev
+```
 
-## 🌈 Examples/Presets
+## 🔑 Налаштування GitHub Actions
 
-To help you understand how to create your own configuration, we provide multiple example applications in the `./examples` directory. Each example demonstrates different onboarding scenarios and includes a sample configuration file:
+### Автоматичне налаштування SSH
 
-1. Base App
+```bash
+chmod +x setup_github_actions.sh
+./setup_github_actions.sh
+```
 
-   - Located in: `./app`
-   - Key features: `various slide configurations` `telegram-native design` `onboarding from demo video`
-   - Run command: `npm run dev`
+### Ручне налаштування
 
-2. Fashion AI App
+1. **Створіть SSH ключ:**
+   ```bash
+   ssh-keygen -t rsa -b 4096 -C "github-actions@telegram-bot" -f ~/.ssh/github-actions
+   ```
 
-   - Located in: `./examples/ai`
-   - Key features: `interactive slides` `currency configuration` `vertical products on paywall` `custom preset`
-   - Run command: `npm run dev:ai`
+2. **Додайте публічний ключ на сервер:**
+   ```bash
+   # На сервері 37.57.209.201
+   mkdir -p ~/.ssh
+   chmod 700 ~/.ssh
+   echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCg/5VifZvwRvE86E2SdblfPHt+FNjNBAJqQa36dv2jKfWLZ4uGgcnpd8AHBrpEQ0jap11M1uzCTWv0MK7XwiGtdSANQ34naWLAGh8IM5cl+5ei5vgCujjrOGsVuTwlD4YfNu2XRztQvA8HACM9SqrcHjTLTVY7PeMGiwZk3KUvLNNfa8NXHtRh1LbpnGe0v89iPS2NjSfOE3vqg1NwPe4k7CGwF/MF0yUdTO1/53YJabnT+VYkju2RiTfgy/nWzoOpxg37lx9iGsHVbTWPst3Nfju0OqgJ8LNHSveGd4IeuFHD690ZvTHxOEdCQ8xz8ANvZ7IjT8jcxBqwnBTM0z+Xh8aSDZQ3g3JSR2+heDDWO830xBlAqI9RfkO0rzAb+1Gl4QqGY6hhH5rEaB/JaugB0HJyZS3lctpA83rhvzpKhvOeS9b/VJN27ha35xdcPpA8z9WH0rRH0hHBw2heh+gI8UoUmoB5m84up2Pv0Tz+jxvKipM3lMRqFlGWOCUvuJtrBYCBww3/3FPuDqgLCYx4+y0K4WZZbZRt1nhbzY81tS4TXR8Z42IguImcFBu0DxvghZgfJXk82IYto9UrE3GIoLCDHPMjxVK7dpqrEEwAUKxUpIx7QMoY/TPZaW11rl6sODCTHRh/p2JQ5pPIjQl1+ybeXuMG6ya6CLC3a3pKjw== github-actions@telegram-bot" >> ~/.ssh/authorized_keys
+   chmod 600 ~/.ssh/authorized_keys
+   ```
 
-3. Meditation App
+3. **Додайте GitHub Secrets:**
+   - `SSH_PRIVATE_KEY` = вміст ~/.ssh/github-actions
+   - `SERVER_HOST` = 37.57.209.201
+   - `SERVER_USER` = roman
+   - `SERVER_PORT` = 22
 
-   - Located in: `./examples/meditation`
-   - Key features: `localization` `custom icons` `different image styles` `custom preset`
-   - Run command: `npm run dev:meditation`
+## 🔄 Автоматичний деплой
 
-4. AI Tales App
+### Що відбувається при push в main:
 
-   - Located in: `./examples/tales`
-   - Key features: `language/currency localization` `interactive flow on onboarding` `custom preset`
-   - Run command: `npm run dev:tales`
+1. **Веб-додаток** - автоматично деплоїться на GitHub Pages
+2. **Telegram бот** - автоматично оновлюється на сервері та перезапускається
+3. **Всі зміни** - синхронізуються автоматично
 
-5. VPN App
-   - Located in: `./examples/vpn`
-   - Key features: `app created during YouTube tutorial using base preset`
-   - Run command: `npm run dev:vpn`
+### Workflow файли:
 
-6. ChatGPT App
-   - Located in: `./examples/chatgpt`
-   - Key features: `onboarding for real bot @chatgpt_karfly_bot` `videos`
-   - Run command: `npm run dev:chagpt`
+- `.github/workflows/deploy.yml` - основний workflow для деплою
 
-## Reusable Packages
+## 📱 Особливості
 
-### [@tok/ui](packages/ui/README.md)
+### Telegram Bot
+- Python + python-telegram-bot
+- Підтримка платежів (Telegram Payments, Wallet Pay)
+- Автоматичний перезапуск через systemd
 
-A collection of essential UI components. Explore the potential of these components by visiting our [Figma project](https://www.figma.com/file/ssQqPZ2vqZhD4QF2xyCTd2/Telegram-Onboarding--ToolKit), where you can see them in action and gain a better understanding of their capabilities.
+### Web App
+- Vue.js + TypeScript
+- FAQ система з пошуком
+- Локалізація (EN/UK)
+- Responsive дизайн
 
-### [@tok/telegram-ui](packages/telegram-ui/README.md)
+## 🛠️ Технології
 
-This package offers a convenient wrapper around the [@twa-dev/sdk](https://github.com/twa-dev/SDK), providing Vue-like components and use-case solutions for Popups, MainButton, BackButton, and Theme integration.
+- **Backend:** Python 3.12, python-telegram-bot
+- **Frontend:** Vue.js 3, TypeScript, SCSS
+- **CI/CD:** GitHub Actions
+- **Deployment:** GitHub Pages + SSH + rsync
+- **Server:** Ubuntu + systemd + Nginx
 
-### [@tok/i18n](packages/i18n/README.md)
+## 📚 Документація
 
-A minimalistic package for handling localization in your applications. We refrain from using third-party solutions due to concerns about the bundle sizes they introduce. While we provide this solution, feel free to replace it with your own if it better suits your needs.
+- `SERVER_SSH_SETUP.md` - детальні інструкції по налаштуванню SSH
+- `setup_github_actions.sh` - автоматичне налаштування GitHub Actions
+- `bot/README.md` - інструкції по запуску бота
 
-### [@tok/generation](packages/generation/README.md)
+## 🚨 Важливо
 
-The primary package for generating projects via a configuration file. It offers presets that can be easily extended within the configuration file.
+- Переконайтеся, що SSH ключ додано на сервер
+- Всі GitHub Secrets мають бути налаштовані
+- Бот має працювати під користувачем `roman` на сервері
 
-### Tools:
+## 📞 Підтримка
 
-#### [@tok/compress](packages/compress/README.md)
+При проблемах перевірте:
+1. GitHub Actions logs
+2. Server logs: `journalctl -u telegram-bot`
+3. SSH з'єднання: `ssh roman@37.57.209.201`
 
-A Node solution for image compression. It processes PNG, JPG, and JPEG files, compressing them and converting them into WEBP, PNG, JPG, or JPEG formats.
+---
 
-#### [@tok/eslint-config](packages/compress/README.md)
-
-A basic ESLint configuration for vue projects to maintain clean and consistent code.
-
-#### [@tok/tsconfig](packages/tsconfig/README.md)
-
-Shared `tsconfig.base.json` file for vue + vite projects
-
-## 3rd party packages:
-
-### [Turborepo](https://turbo.build/)
-
-A package for managing a monorepository. If you haven't heard of it, take a look at its [documentation](https://turbo.build/repo/docs); it's worth it
-
-### [Vite](https://vitejs.dev/)
-
-A package for building and running modern web applications. [Documentation](https://vitejs.dev/guide/)
-
-### [Vue](https://vuejs.org/)
-
-Vue is a JavaScript framework for building user interfaces. [Documentation](https://vuejs.org/)
-
-### [@twa-dev/sdk](https://github.com/twa-dev/SDK)
-
-NPM package for Telegram Mini Apps SDK. Take a look at their [GitHub repository](https://github.com/twa-dev/SDK)
-
-### [Lottie-web](https://github.com/airbnb/lottie-web)
-
-Lottie is a mobile library for Web that parses Adobe After Effects animations exported as json with Bodymovin and renders them natively!
-
-For information on how `sticker.tgs` files are rendered in this project, please refer to [this link](./packages/telegram-ui/components/Sticker/README.md)
-
-## Our team
-
-- [Konstantin Beskrovnyi](https://github.com/Easterok) – Web
-- [Karim Iskakov](https://github.com/karfly) – Python/Product
-- [Michael Browk](https://www.michaelbrowk.com) – Design
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+**🎯 Після налаштування: просто робіть `git push` і все оновиться автоматично!**
