@@ -76,8 +76,8 @@ jobs:
         run: |
           ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
             set -e
-            sudo -n mkdir -p /opt/telegram-bot/bot
-            sudo -n chown -R $USER:$USER /opt/telegram-bot
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S mkdir -p /opt/telegram-bot/bot
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S chown -R $USER:$USER /opt/telegram-bot
           '
 
       - name: Rsync bot sources
@@ -119,7 +119,7 @@ jobs:
             fi
 
             echo "Restarting service: telegram-bot"
-            sudo -n systemctl restart telegram-bot
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl restart telegram-bot
             systemctl is-active --quiet telegram-bot && echo "Service is active"
             echo "--- Recent logs ---"
             journalctl -u telegram-bot -n 40 --no-pager || true
