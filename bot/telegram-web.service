@@ -1,0 +1,14 @@
+[Unit]
+Description=Telegram Web Server
+After=network.target
+
+[Service]
+Type=simple
+User=roman
+WorkingDirectory=/opt/telegram-bot/app/dist
+ExecStart=/home/roman/Стільниця/sk-telegram-bot/sk-onboarding/bot/venv/bin/python3 /home/roman/Стільниця/sk-telegram-bot/sk-onboarding/bot/simple_server.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
