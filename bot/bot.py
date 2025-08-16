@@ -15,7 +15,11 @@ import urllib.parse
 import uuid
 from typing import Any, Dict, Optional, Tuple
 import httpx
+import urllib3
 from dotenv import load_dotenv
+
+# Disable SSL warnings for self-signed certificates
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from telegram import (
     InlineKeyboardButton,
@@ -320,7 +324,7 @@ async def send_wallet_pay_invoice(
             "customData": "",
         }
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:
             result = await client.post(url, headers=headers, data=json.dumps(data))
 
         result_json = result.json()
@@ -384,7 +388,7 @@ async def check_wallet_pay_payment_status(
 
         params = {"id": order_id}
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(verify=False) as client:
             result = await client.get(url, headers=headers, params=params)
 
         result_json = result.json()
