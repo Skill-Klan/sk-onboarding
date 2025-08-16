@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "admission",
+      "title": "Admission and Learning Tracks",
+      "items": [
+        {
+          "id": "tracks_overview",
+          "question": "What learning tracks are available?",
+          "answer": "We offer several main learning tracks:\n\n• **QA (Quality Assurance)** - software testing\n• **Business Analytics** - business process and requirements analysis\n• **Frontend Development** - user interface creation\n• **Backend Development** - server-side applications\n• **Data Science** - data analysis and machine learning\n\nEach track has its own program and expert instructors."
+        },
+        {
+          "id": "requirements",
+          "question": "What are the admission requirements?",
+          "answer": "To enroll in our courses, you need:\n\n• **Basic knowledge** of computers and the internet\n• **Technical requirements**: stable internet connection, computer/laptop\n• **Motivation** and readiness to learn\n• **Age**: from 16 years old\n\nPrevious programming experience is not required for beginner courses."
+        },
+        {
+          "id": "duration",
+          "question": "How long does the training last?",
+          "answer": "Training duration depends on the chosen track:\n\n• **Basic courses**: 2-3 months\n• **Advanced courses**: 4-6 months\n• **Complete cycle**: 8-12 months\n\nTraining takes place online with flexible scheduling options."
+        }
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Onboarding Process",
+      "items": [
+        {
+          "id": "how_to_start",
+          "question": "How to start learning?",
+          "answer": "To start learning, follow these steps:\n\n1. **Choose a track** - review available courses\n2. **Fill out the form** - provide your contact information\n3. **Pay for the course** - choose a convenient payment method\n4. **Get access** - we'll send login credentials\n5. **Start learning** - follow the learning plan\n\nOur managers will help at every stage."
+        },
+        {
+          "id": "schedule",
+          "question": "How is the training organized?",
+          "answer": "Training is organized as conveniently as possible:\n\n• **Online format** - learn from anywhere\n• **Flexible schedule** - choose convenient times\n• **Practical assignments** - reinforce knowledge on real projects\n• **Mentor support** - get help when needed\n• **Community** - communicate with other students"
+        },
+        {
+          "id": "support",
+          "question": "What support is provided?",
+          "answer": "We provide comprehensive support:\n\n• **Technical support** - help with the platform\n• **Learning support** - explanation of complex topics\n• **Career consultation** - employment advice\n• **24/7 chat** - quick answers to questions\n• **Personal manager** - support throughout the course"
+        }
+      ]
+    },
+    {
+      "id": "payment",
+      "title": "Payment and Pricing",
+      "items": [
+        {
+          "id": "pricing",
+          "question": "How much does the training cost?",
+          "answer": "Training cost depends on the chosen course:\n\n• **Basic course**: from $99\n• **Advanced course**: from $199\n• **Complete cycle**: from $299\n\nStudent discounts and group application discounts are available. Payment in installments is possible."
+        },
+        {
+          "id": "payment_methods",
+          "question": "What payment methods are available?",
+          "answer": "We accept various payment methods:\n\n• **Bank cards** (Visa, MasterCard)\n• **E-wallets** (PayPal, Stripe)\n• **Bank transfers**\n• **Cryptocurrency** (Bitcoin, Ethereum)\n• **Installments** through partner banks\n\nAll payments are secure and safe."
+        },
+        {
+          "id": "refund",
+          "question": "Can I get a refund?",
+          "answer": "Yes, we provide a money-back guarantee:\n\n• **14 days** - full refund without questions\n• **30 days** - refund with valid reasons\n• **After 30 days** - considered individually\n\nThe refund process takes 3-5 business days."
+        }
+      ]
+    },
+    {
+      "id": "career",
+      "title": "Career and Employment",
+      "items": [
+        {
+          "id": "job_placement",
+          "question": "Do you help with employment?",
+          "answer": "Yes, we provide comprehensive career support:\n\n• **Resume** - help with creation\n• **Portfolio** - preparation of projects for showcase\n• **Interviews** - training interview skills\n• **Vacancies** - access to exclusive offers\n• **Networking** - meeting potential employers\n\nOur graduates work in leading IT companies."
+        },
+        {
+          "id": "salary_expectations",
+          "question": "What salary can I expect after completing the course?",
+          "answer": "Salary depends on many factors:\n\n• **Junior positions**: $800-1500 per month\n• **Middle positions**: $1500-3000 per month\n• **Senior positions**: $3000+ per month\n\nConsider:\n- Experience and skills\n- City/country of work\n- Specialization\n- Market demand"
+        },
+        {
+          "id": "certificate",
+          "question": "Do you issue certificates?",
+          "answer": "Yes, after successfully completing the course, you receive:\n\n• **Certificate** of course completion\n• **Portfolio** with completed projects\n• **Recommendation letter** from mentor\n• **Access to graduate community**\n• **Lifetime support** on career matters\n\nThe certificate is recognized by employers and HR specialists."
+        }
+      ]
+    }
+  ]
+}

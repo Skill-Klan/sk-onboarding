@@ -1,0 +1,165 @@
+/* FAQ Animations */
+
+/* Плавні переходи для всіх інтерактивних елементів */
+.faq-category-item,
+.faq-question-item {
+  transition: all 0.2s ease;
+}
+
+/* Анімація появи/зникнення категорій */
+.faq-category-enter-active,
+.faq-category-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.faq-category-enter-from,
+.faq-category-leave-to {
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(-10px);
+}
+
+.faq-category-enter-to,
+.faq-category-leave-from {
+  opacity: 1;
+  max-height: 1000px;
+  transform: translateY(0);
+}
+
+/* Анімація появи/зникнення відповідей */
+.faq-answer-enter-active,
+.faq-answer-leave-active {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.faq-answer-enter-from,
+.faq-answer-leave-to {
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(-5px);
+}
+
+.faq-answer-enter-to,
+.faq-answer-leave-from {
+  opacity: 1;
+  max-height: 200px;
+  transform: translateY(0);
+}
+
+/* Анімація іконок chevron */
+.chevron-icon {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chevron-icon.is-open {
+  transform: rotate(180deg);
+}
+
+/* Hover ефекти */
+.faq-category-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.faq-question-item .question-header:hover {
+  background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+}
+
+/* Анімація пошуку */
+.faq-search {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Анімація завантаження */
+.faq-loading {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анімація підсвічування збігів */
+.faq-highlight {
+  animation: highlightPulse 0.6s ease-out;
+}
+
+@keyframes highlightPulse {
+  0% {
+    background: var(--tg-theme-button-color, #0088cc);
+    transform: scale(1);
+  }
+  50% {
+    background: var(--tg-theme-button-color, #0088cc);
+    transform: scale(1.05);
+  }
+  100% {
+    background: var(--tg-theme-button-color, #0088cc);
+    transform: scale(1);
+  }
+}
+
+/* Плавні переходи для кнопок */
+.retry-button,
+.clear-button {
+  transition: all 0.2s ease;
+}
+
+.retry-button:hover,
+.clear-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Адаптивні анімації для мобільних пристроїв */
+@media (max-width: 480px) {
+  .faq-category-enter-active,
+  .faq-category-leave-active,
+  .faq-answer-enter-active,
+  .faq-answer-leave-active {
+    transition-duration: 0.2s;
+  }
+  
+  .faq-category-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Оптимізація для пристроїв з медленними анімаціями */
+@media (prefers-reduced-motion: reduce) {
+  .faq-category-item,
+  .faq-question-item,
+  .chevron-icon,
+  .faq-category-enter-active,
+  .faq-category-leave-active,
+  .faq-answer-enter-active,
+  .faq-answer-leave-active {
+    transition: none;
+    animation: none;
+  }
+  
+  .faq-category-item:hover,
+  .faq-question-item .question-header:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

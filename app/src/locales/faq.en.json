@@ -1,0 +1,25 @@
+{
+  "title": "Frequently Asked Questions",
+  "subtitle": "Find answers to the most popular questions",
+  "search": {
+    "placeholder": "Search questions and answers...",
+    "no_results": "Nothing found for your query",
+    "try_different": "Try changing your search query"
+  },
+  "loading": "Loading FAQ...",
+  "error": {
+    "title": "Error loading data",
+    "retry": "Try again",
+    "fallback": {
+      "question": "Failed to load FAQ",
+      "answer": "Try refreshing the page or contact support"
+    }
+  },
+  "empty": {
+    "title": "FAQ is empty",
+    "description": "No questions and answers available at the moment"
+  },
+  "actions": {
+    "go_back": "Go back"
+  }
+}

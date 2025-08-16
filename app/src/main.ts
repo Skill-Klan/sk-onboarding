@@ -1,6 +1,22 @@
-import { bootstrap } from '@tok/generation';
-
+import { createApp } from 'vue';
 import App from './App.vue';
-import { default as config } from './config';
+import router from './router';
+import { createI18n } from 'vue-i18n';
+import { uk, en } from './locales';
 
-bootstrap(App, config);
+const i18n = createI18n({
+  legacy: false,
+  locale: 'uk',
+  fallbackLocale: 'uk',
+  messages: {
+    uk,
+    en
+  }
+});
+
+const app = createApp(App);
+
+app.use(router);
+app.use(i18n);
+
+app.mount('#app');

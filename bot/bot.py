@@ -139,12 +139,43 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     )
                 ),
             ),
+            KeyboardButton(
+                text="❓ FAQ",
+                web_app=WebAppInfo(
+                    url=add_get_params_to_url(
+                        f"{LOCAL_ONBOARDING_URL}/faq", user_data
+                    )
+                ),
+            ),
         ]
     )
 
     await update.effective_message.reply_text(
         text=text,
         reply_markup=reply_markup,
+        parse_mode=ParseMode.HTML,
+        disable_web_page_preview=True,
+    )
+
+
+async def handle_faq_button(
+    update: Update, context: ContextTypes.DEFAULT_TYPE
+) -> None:
+    """This handler is called when user clicks FAQ button"""
+    
+    user_data = get_user_data(update.effective_user)
+    
+    text = (
+        f"❓ <b>FAQ - Часті питання</b>\n"
+        f"\n"
+        f"Ви перейшли до розділу з найпопулярнішими питаннями та відповідями.\n"
+        f"Тут ви знайдете всю необхідну інформацію про наші послуги.\n"
+        f"\n"
+        f"Якщо у вас є додаткові питання, звертайтеся до нашої підтримки!"
+    )
+    
+    await update.effective_message.reply_text(
+        text=text,
         parse_mode=ParseMode.HTML,
         disable_web_page_preview=True,
     )
@@ -417,9 +448,14 @@ def run_bot(
     ## /start
     application.add_handler(CommandHandler("start", start))
 
-    ## get data from mini app
+    ## FAQ button handler
     application.add_handler(
         MessageHandler(filters.StatusUpdate.WEB_APP_DATA, get_data_from_mini_app)
+    )
+    
+    ## FAQ button handler (when user clicks FAQ button)
+    application.add_handler(
+        MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_faq_button)
     )
 
     ## payment
