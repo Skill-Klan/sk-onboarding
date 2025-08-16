@@ -3,10 +3,6 @@ name: Deploy App & Bot
 on:
   push:
     branches: ["main"]
-    paths:
-      - "app/**"
-      - "bot/**"
-      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 permissions:
