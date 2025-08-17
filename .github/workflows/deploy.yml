@@ -76,8 +76,8 @@ jobs:
         run: |
           ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
             set -e
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S mkdir -p /opt/telegram-bot/bot
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S chown -R $USER:$USER /opt/telegram-bot
+            sudo mkdir -p /opt/telegram-bot/bot
+            sudo chown -R $USER:$USER /opt/telegram-bot
             
             # Create backup of current bot version if it exists
             if [ -d "/opt/telegram-bot/bot" ] && [ "$(ls -A /opt/telegram-bot/bot)" ]; then
