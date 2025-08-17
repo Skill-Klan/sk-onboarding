@@ -18,7 +18,17 @@ export default defineConfig({
           title: 'Welcome to Telegram Onboarding Kit',
           description:
             "Create stunning onboarding and paywall for your Telegram Bot using the full power of Mini Apps<br><br>It's <b>simple</b>, <b>fast</b>, highly <b>customizable</b> and <a href='https://github.com/Easterok/telegram-onboarding-kit' target='_blank'>open-source</a>!",
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // image
@@ -32,7 +42,17 @@ export default defineConfig({
           title: 'Onboarding supports many types of content',
           description:
             "Here you can see <b>Image</b>. But it's just the beginning...",
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // sticker
@@ -47,7 +67,17 @@ export default defineConfig({
           title: 'Telegram stickers',
           description:
             'Just download any <b>.tgs</b> sticker from Telegram and use it in your onboardings',
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // form
@@ -79,7 +109,17 @@ export default defineConfig({
               type: 'checkbox',
             },
           ],
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // video
@@ -95,7 +135,17 @@ export default defineConfig({
           title: 'Videos',
           description:
             "Typically, video starts <b>automatically</b><br><br>However, on iOS, it will only autoplay upon any prior tap on the page ('Next' button doesn't count). If video doesn't autoplay, user will see preview and pretty animation, inviting them to tap to play the video",
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // list
@@ -136,7 +186,17 @@ export default defineConfig({
               text: 'Some extremely cool feature',
             },
           ],
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // "everything is customizable" slide
@@ -156,7 +216,17 @@ export default defineConfig({
             'Button text and actions (look down)',
             'Use our carefully crafted <b>presets</b> or easily create your own',
           ],
-          button: 'Super-Duper Next',
+          button: {
+            content: 'Super-Duper Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // slide with other features
@@ -177,9 +247,20 @@ export default defineConfig({
             'Content pre-loading for high speed',
             '<b>Low-code</b> approach to building onboardings',
             'Many examples/presets',
+            '<b>FAQ system</b> with search and categories',
             "And many more... (see <a href='https://github.com/Easterok/telegram-onboarding-kit' target='_blank'>GitHub</a>)",
           ],
-          button: 'Next',
+          button: {
+            content: 'Next',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
+          },
         },
 
         // go to paywall slide
@@ -197,6 +278,14 @@ export default defineConfig({
           button: {
             content: 'Go to Paywall',
             to: '/paywall',
+            actions: [
+              {
+                type: 'navigate',
+                to: '/faq',
+                text: '📚 FAQ',
+                style: 'secondary'
+              }
+            ]
           },
         },
       ],
@@ -246,6 +335,14 @@ export default defineConfig({
         // popup for payment methods choice
         type: 'web',
       },
+      actions: [
+        {
+          type: 'navigate',
+          to: '/faq',
+          text: '📚 FAQ',
+          style: 'secondary'
+        }
+      ],
       links: [
         {
           text: 'Privacy policy',
@@ -254,6 +351,10 @@ export default defineConfig({
         {
           text: 'Terms of use',
           href: 'https://google.com',
+        },
+        {
+          text: '📚 FAQ',
+          href: '/faq',
         },
       ],
     },
