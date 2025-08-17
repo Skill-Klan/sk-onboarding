@@ -43,6 +43,21 @@ ssh "$SERVER_USER@$SERVER_HOST" "
     source venv/bin/activate
     pip install -r requirements.txt
     
+    # Check .env file
+    if [ ! -f ".env" ]; then
+        echo "❌ ERROR: .env file not found!"
+        echo "❌ Bot cannot start without environment configuration"
+        echo "❌ Please create .env file with BOT_TOKEN"
+        exit 1
+    fi
+    
+    # Check BOT_TOKEN
+    if grep -q '^BOT_TOKEN=""' .env || ! grep -q '^BOT_TOKEN=' .env; then
+        echo "❌ ERROR: BOT_TOKEN not configured in .env file!"
+        echo "❌ Bot cannot start without valid BOT_TOKEN"
+        exit 1
+    fi
+    
     # Оновлення сервісного файлу
     echo '📋 Updating service file...'
     sudo cp telegram-bot-enhanced.service /etc/systemd/system/telegram-bot.service

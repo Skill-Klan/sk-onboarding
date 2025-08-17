@@ -154,6 +154,32 @@ jobs:
               . venv/bin/activate
               pip install --upgrade pip
               pip install -r requirements.txt
+              
+              # Check and create .env file if needed
+              if [ ! -f ".env" ]; then
+                echo "⚠️ .env file not found, creating from example..."
+                if [ -f "example.env" ]; then
+                  cp example.env .env
+                  echo "⚠️ WARNING: .env file created from example. Please configure BOT_TOKEN manually!"
+                  echo "⚠️ Bot will not start without valid BOT_TOKEN"
+                else
+                  echo "❌ ERROR: No .env file and no example.env found!"
+                  echo "❌ Bot cannot start without environment configuration"
+                  exit 1
+                fi
+              else
+                echo "✅ .env file found"
+                
+                # Check if BOT_TOKEN is configured
+                if grep -q '^BOT_TOKEN=""' .env || ! grep -q '^BOT_TOKEN=' .env; then
+                  echo "❌ ERROR: BOT_TOKEN not configured in .env file!"
+                  echo "❌ Bot cannot start without valid BOT_TOKEN"
+                  echo "❌ Please configure BOT_TOKEN in .env file manually"
+                  exit 1
+                else
+                  echo "✅ BOT_TOKEN configured in .env file"
+                fi
+              fi
             elif [ -f "$NODE_PKG" ]; then
               echo "Detected Node.js bot. Installing deps..."
               if [ -f package-lock.json ]; then
@@ -165,6 +191,11 @@ jobs:
               echo "No requirements.txt or package.json found. Nothing to install."
             fi
 
+            # Update service file to use new health check functionality
+            echo "Updating service file..."
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S cp telegram-bot-enhanced.service /etc/systemd/system/telegram-bot.service
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl daemon-reload
+            
             echo "Restarting service: telegram-bot"
             echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl restart telegram-bot
             
