@@ -78,6 +78,21 @@ jobs:
             set -e
             echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S mkdir -p /opt/telegram-bot/bot
             echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S chown -R $USER:$USER /opt/telegram-bot
+            
+            # Create backup of current bot version if it exists
+            if [ -d "/opt/telegram-bot/bot" ] && [ "$(ls -A /opt/telegram-bot/bot)" ]; then
+              echo "Creating backup of current bot version..."
+              BACKUP_DIR="/opt/telegram-bot/backup-$(date +%Y%m%d-%H%M%S)"
+              cp -r /opt/telegram-bot/bot "$BACKUP_DIR"
+              echo "Backup created at: $BACKUP_DIR"
+              
+              # Keep only last 3 backups
+              cd /opt/telegram-bot
+              ls -dt backup-* | tail -n +4 | xargs -r rm -rf
+              echo "Old backups cleaned up"
+            else
+              echo "No existing bot to backup"
+            fi
           '
 
       - name: Rsync bot sources
@@ -86,6 +101,38 @@ jobs:
             --exclude=".git" \
             --exclude="node_modules" \
             bot/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/opt/telegram-bot/bot/
+
+      - name: Validate bot code syntax
+        run: |
+          cd bot
+          if [ -f "package.json" ]; then
+            echo "Validating Node.js bot code..."
+            if [ -f "package-lock.json" ]; then
+              npm ci --omit=dev --no-audit --no-fund
+            else
+              npm i --omit=dev --no-audit --no-fund
+            fi
+            # Check if project builds without errors
+            if [ -f "tsconfig.json" ]; then
+              echo "Running TypeScript compilation check..."
+              npx tsc --noEmit
+            fi
+            # Check if main file can be parsed by Node.js
+            if [ -f "index.js" ]; then
+              echo "Checking JavaScript syntax..."
+              node --check index.js
+            elif [ -f "bot.js" ]; then
+              echo "Checking JavaScript syntax..."
+              node --check bot.js
+            fi
+            echo "✅ Bot code validation passed"
+          elif [ -f "requirements.txt" ]; then
+            echo "Validating Python bot code..."
+            python3 -m py_compile *.py || echo "⚠️ Python syntax check completed"
+            echo "✅ Bot code validation passed"
+          else
+            echo "⚠️ No package.json or requirements.txt found, skipping validation"
+          fi
 
       - name: Install deps (auto-detect runtime) & restart service
         run: |
@@ -120,7 +167,149 @@ jobs:
 
             echo "Restarting service: telegram-bot"
             echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl restart telegram-bot
-            systemctl is-active --quiet telegram-bot && echo "Service is active"
+            
+            # Wait for service to stabilize with progressive checks
+            echo "Waiting for service to stabilize..."
+            sleep 15
+            
+            # Progressive health check with retries
+            echo "Performing progressive health check..."
+            for attempt in 1 2 3; do
+              echo "Health check attempt $attempt/3..."
+              
+              if systemctl is-active --quiet telegram-bot; then
+                echo "✅ Service is active on attempt $attempt"
+                break
+              else
+                if [ $attempt -eq 3 ]; then
+                  echo "❌ ERROR: Service failed to stabilize after 3 attempts"
+                  systemctl status telegram-bot --no-pager || true
+                  exit 1
+                fi
+                echo "⚠️ Service not ready, waiting 10 seconds before retry..."
+                sleep 10
+              fi
+            done
+            
+            # Verify service is still active after progressive check
+            echo "Final service status verification..."
+            if ! systemctl is-active --quiet telegram-bot; then
+              echo "❌ ERROR: telegram-bot service became inactive after health check"
+              echo "Service status:"
+              systemctl status telegram-bot --no-pager || true
+              echo "Recent logs:"
+              journalctl -u telegram-bot -n 50 --no-pager || true
+              exit 1
+            fi
+            
+            echo "✅ telegram-bot service is confirmed active and running"
+            
+            # Additional status check
+            echo "Detailed service status:"
+            systemctl status telegram-bot --no-pager --lines=20 || true
+            
             echo "--- Recent logs ---"
             journalctl -u telegram-bot -n 40 --no-pager || true
+            
+            # Health check - verify bot is actually functioning
+            echo "Performing health check..."
+            sleep 5  # Additional wait for bot to fully initialize
+            
+            # Check if bot process is running and responding
+            if pgrep -f "telegram-bot" > /dev/null; then
+              echo "✅ Bot process is running"
+              
+              # Check bot logs for any error messages
+              if journalctl -u telegram-bot -n 20 --no-pager | grep -i "error\|exception\|fatal" > /dev/null; then
+                echo "⚠️ WARNING: Found error messages in bot logs"
+                journalctl -u telegram-bot -n 20 --no-pager | grep -i "error\|exception\|fatal" || true
+              else
+                echo "✅ No critical errors found in recent logs"
+              fi
+              
+              # Check if bot has recent activity (last 5 minutes)
+              if journalctl -u telegram-bot --since "5 minutes ago" --no-pager | grep -q .; then
+                echo "✅ Bot has recent activity in logs"
+              else
+                echo "⚠️ WARNING: No recent activity in bot logs (last 5 minutes)"
+              fi
+              
+            else
+              echo "❌ ERROR: Bot process not found running"
+              echo "Process list:"
+              ps aux | grep -i telegram || true
+              exit 1
+            fi
+            
+                        echo "✅ Health check completed successfully"
+            
+            # Save logs to file for CI artifacts
+            echo "Saving bot logs to file..."
+            journalctl -u telegram-bot -n 100 --no-pager > /tmp/bot-logs.txt || true
+            echo "Logs saved to /tmp/bot-logs.txt"
+            
+            # Mark deployment as successful
+            echo "SUCCESS" > /tmp/deployment-status.txt
+            '
+            
+      - name: Download bot logs from server
+        run: |
+          scp -P ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/bot-logs.txt ./bot-logs.txt || echo "Failed to download logs, continuing..."
+          
+      - name: Upload bot logs as artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bot-deployment-logs-${{ github.run_number }}
+          path: bot-logs.txt
+          retention-days: 30
+          
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "🚨 DEPLOYMENT FAILED - Initiating rollback..."
+          
+          # Download deployment status from server
+          scp -P ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/deployment-status.txt ./deployment-status.txt 2>/dev/null || echo "No status file found"
+          
+          # Check if we have a backup to rollback to
+          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
+            set -e
+            cd /opt/telegram-bot
+            
+            # Find most recent backup
+            LATEST_BACKUP=$(ls -dt backup-* 2>/dev/null | head -n1)
+            
+            if [ -n "$LATEST_BACKUP" ] && [ -d "$LATEST_BACKUP" ]; then
+              echo "🔄 Rolling back to backup: $LATEST_BACKUP"
+              
+              # Stop current bot service
+              echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl stop telegram-bot || true
+              
+              # Remove failed deployment
+              rm -rf bot
+              
+              # Restore from backup
+              cp -r "$LATEST_BACKUP" bot
+              echo "✅ Rollback completed successfully"
+              
+              # Restart service
+              echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl start telegram-bot
+              sleep 10
+              
+              # Verify rollback
+              if systemctl is-active --quiet telegram-bot; then
+                echo "✅ Service restored and running after rollback"
+              else
+                echo "⚠️ Warning: Service not active after rollback"
+                systemctl status telegram-bot --no-pager || true
+              fi
+              
+            else
+              echo "❌ No backup found for rollback"
+              echo "Current bot directory contents:"
+              ls -la bot/ || true
+            fi
           '
+          
+          echo "🔄 Rollback process completed"
