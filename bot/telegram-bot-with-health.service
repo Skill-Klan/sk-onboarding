@@ -1,0 +1,48 @@
+[Unit]
+Description=Telegram Bot Service with Health Check
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=roman
+Group=roman
+WorkingDirectory=/opt/telegram-bot/bot
+Environment=PATH=/opt/telegram-bot/bot/venv/bin
+Environment=PYTHONPATH=/opt/telegram-bot/bot/venv/lib/python3.12/site-packages
+Environment=HEALTH_CHECK_PORT=8080
+ExecStart=/opt/telegram-bot/bot/venv/bin/python3 -c "
+import subprocess
+import sys
+import time
+import threading
+
+def run_bot():
+    subprocess.run([sys.executable, 'bot.py'])
+
+def run_health():
+    subprocess.run([sys.executable, 'health_check.py'])
+
+# Start health check server in background
+health_thread = threading.Thread(target=run_health, daemon=True)
+health_thread.start()
+
+# Wait a bit for health server to start
+time.sleep(2)
+
+# Run main bot
+run_bot()
+"
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/opt/telegram-bot/bot
+
+[Install]
+WantedBy=multi-user.target

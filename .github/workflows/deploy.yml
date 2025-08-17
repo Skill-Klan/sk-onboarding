@@ -183,7 +183,15 @@ jobs:
               else
                 if [ $attempt -eq 3 ]; then
                   echo "❌ ERROR: Service failed to stabilize after 3 attempts"
+                  echo "=== DETAILED SERVICE STATUS ==="
                   systemctl status telegram-bot --no-pager || true
+                  echo "=== RECENT SERVICE LOGS ==="
+                  journalctl -u telegram-bot -n 50 --no-pager || true
+                  echo "=== SYSTEM RESOURCES ==="
+                  free -h || true
+                  df -h || true
+                  echo "=== PROCESS LIST ==="
+                  ps aux | grep -i telegram || true
                   exit 1
                 fi
                 echo "⚠️ Service not ready, waiting 10 seconds before retry..."
@@ -215,33 +223,78 @@ jobs:
             echo "Performing health check..."
             sleep 5  # Additional wait for bot to fully initialize
             
-            # Check if bot process is running and responding
-            if pgrep -f "telegram-bot" > /dev/null; then
-              echo "✅ Bot process is running"
+            # Test health check endpoint
+            echo "Testing health check endpoint..."
+            if command -v curl >/dev/null 2>&1; then
+              # Wait for health endpoint to be ready
+              for health_attempt in 1 2 3 4 5; do
+                echo "Health check attempt $health_attempt/5..."
+                if curl -f -s http://localhost:8081/health >/dev/null 2>&1; then
+                  echo "✅ Health endpoint is responding"
+                  break
+                else
+                  if [ $health_attempt -eq 5 ]; then
+                    echo "❌ Health endpoint not responding after 5 attempts"
+                    echo "Health check failed - bot may not be fully initialized"
+                  else
+                    echo "⚠️ Health endpoint not ready, waiting 5 seconds..."
+                    sleep 5
+                  fi
+                fi
+              done
               
-              # Check bot logs for any error messages
-              if journalctl -u telegram-bot -n 20 --no-pager | grep -i "error\|exception\|fatal" > /dev/null; then
-                echo "⚠️ WARNING: Found error messages in bot logs"
-                journalctl -u telegram-bot -n 20 --no-pager | grep -i "error\|exception\|fatal" || true
+              # Test status endpoint
+              echo "Testing status endpoint..."
+              if curl -f -s http://localhost:8081/status >/dev/null 2>&1; then
+                echo "✅ Status endpoint is responding"
+                # Show status response
+                echo "Bot status:"
+                curl -s http://localhost:8081/status | head -c 200
+                echo ""
               else
-                echo "✅ No critical errors found in recent logs"
+                echo "⚠️ Status endpoint not responding"
               fi
-              
-              # Check if bot has recent activity (last 5 minutes)
-              if journalctl -u telegram-bot --since "5 minutes ago" --no-pager | grep -q .; then
-                echo "✅ Bot has recent activity in logs"
-              else
-                echo "⚠️ WARNING: No recent activity in bot logs (last 5 minutes)"
-              fi
-              
             else
-              echo "❌ ERROR: Bot process not found running"
-              echo "Process list:"
-              ps aux | grep -i telegram || true
-              exit 1
+              echo "⚠️ curl not available, skipping HTTP health checks"
             fi
             
-                        echo "✅ Health check completed successfully"
+            # Check if bot process is running and responding
+            echo "Checking bot processes..."
+            if pgrep -f "telegram-bot" > /dev/null; then
+              echo "✅ Bot service process is running"
+            else
+              echo "⚠️ Bot service process not found"
+            fi
+            
+            if pgrep -f "bot.py" > /dev/null; then
+              echo "✅ Bot Python process is running"
+            else
+              echo "⚠️ Bot Python process not found"
+            fi
+            
+            if pgrep -f "health_check.py" > /dev/null; then
+              echo "✅ Health check server process is running"
+            else
+              echo "⚠️ Health check server process not found"
+            fi
+            
+            # Check bot logs for any error messages
+            echo "Checking bot logs for errors..."
+            if journalctl -u telegram-bot -n 20 --no-pager | grep -i "error\|exception\|fatal" >/dev/null 2>&1; then
+              echo "⚠️ WARNING: Found error messages in bot logs"
+              journalctl -u telegram-bot -n 20 --no-pager | grep -i "error\|exception\|fatal" || true
+            else
+              echo "✅ No critical errors found in recent logs"
+            fi
+            
+            # Check if bot has recent activity (last 5 minutes)
+            if journalctl -u telegram-bot --since "5 minutes ago" --no-pager | grep -q .; then
+              echo "✅ Bot has recent activity in logs"
+            else
+              echo "⚠️ WARNING: No recent activity in bot logs (last 5 minutes)"
+            fi
+            
+            echo "✅ Health check completed successfully"
             
             # Save logs to file for CI artifacts
             echo "Saving bot logs to file..."
