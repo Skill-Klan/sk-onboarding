@@ -46,6 +46,7 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
                     "python_version": sys.version,
                     "bot_token_set": bool(os.getenv("BOT_TOKEN")),
                     "local_onboarding_url": os.getenv("LOCAL_ONBOARDING_URL", "not_set"),
+                    "local_faq_url": os.getenv("LOCAL_FAQ_URL", "not_set"),
                     "base_onboarding_url": os.getenv("BASE_ONBOARDING_URL", "not_set")
                 }
             }
