@@ -155,31 +155,30 @@ jobs:
               pip install --upgrade pip
               pip install -r requirements.txt
               
-              # Check and create .env file if needed
+              # Create or update .env file with BOT_TOKEN from GitHub Secrets
+              echo "🔧 Setting up .env file with BOT_TOKEN..."
+              
               if [ ! -f ".env" ]; then
-                echo "⚠️ .env file not found, creating from example..."
-                if [ -f "example.env" ]; then
-                  cp example.env .env
-                  echo "⚠️ WARNING: .env file created from example. Please configure BOT_TOKEN manually!"
-                  echo "⚠️ Bot will not start without valid BOT_TOKEN"
-                else
-                  echo "❌ ERROR: No .env file and no example.env found!"
-                  echo "❌ Bot cannot start without environment configuration"
-                  exit 1
-                fi
-              else
-                echo "✅ .env file found"
-                
-                # Check if BOT_TOKEN is configured
-                if grep -q '^BOT_TOKEN=""' .env || ! grep -q '^BOT_TOKEN=' .env; then
-                  echo "❌ ERROR: BOT_TOKEN not configured in .env file!"
-                  echo "❌ Bot cannot start without valid BOT_TOKEN"
-                  echo "❌ Please configure BOT_TOKEN in .env file manually"
-                  exit 1
-                else
-                  echo "✅ BOT_TOKEN configured in .env file"
-                fi
+                echo "📋 Creating .env file from example.env..."
+                cp example.env .env
               fi
+              
+              # Update BOT_TOKEN in .env file
+              if [ -n "${{ secrets.BOT_TOKEN }}" ]; then
+                echo "✅ Updating BOT_TOKEN in .env file..."
+                # Replace BOT_TOKEN line with actual token
+                sed -i "s/^BOT_TOKEN=.*/BOT_TOKEN=\"${{ secrets.BOT_TOKEN }}\"/" .env
+                echo "✅ BOT_TOKEN configured successfully"
+              else
+                echo "⚠️ WARNING: BOT_TOKEN not found in GitHub Secrets!"
+                echo "⚠️ Bot will not start without valid BOT_TOKEN"
+                echo "⚠️ Please add BOT_TOKEN to GitHub repository secrets"
+                exit 1
+              fi
+              
+              # Set correct permissions
+              chmod 600 .env
+              echo "✅ .env file permissions set correctly"
             elif [ -f "$NODE_PKG" ]; then
               echo "Detected Node.js bot. Installing deps..."
               if [ -f package-lock.json ]; then

@@ -43,20 +43,21 @@ ssh "$SERVER_USER@$SERVER_HOST" "
     source venv/bin/activate
     pip install -r requirements.txt
     
-    # Check .env file
+    # Setup .env file with BOT_TOKEN
     if [ ! -f ".env" ]; then
-        echo "❌ ERROR: .env file not found!"
-        echo "❌ Bot cannot start without environment configuration"
-        echo "❌ Please create .env file with BOT_TOKEN"
-        exit 1
+        echo "📋 Creating .env file from example.env..."
+        cp example.env .env
     fi
     
-    # Check BOT_TOKEN
-    if grep -q '^BOT_TOKEN=""' .env || ! grep -q '^BOT_TOKEN=' .env; then
-        echo "❌ ERROR: BOT_TOKEN not configured in .env file!"
-        echo "❌ Bot cannot start without valid BOT_TOKEN"
-        exit 1
-    fi
+    # Update BOT_TOKEN in .env file
+    BOT_TOKEN="8294414477:AAFRsKrEE2PqcE2kBj8o7hbsZ3re5hPold0"
+    echo "✅ Updating BOT_TOKEN in .env file..."
+    sed -i "s/^BOT_TOKEN=.*/BOT_TOKEN=\"$BOT_TOKEN\"/" .env
+    echo "✅ BOT_TOKEN configured successfully"
+    
+    # Set correct permissions
+    chmod 600 .env
+    echo "✅ .env file permissions set correctly"
     
     # Оновлення сервісного файлу
     echo '📋 Updating service file...'
