@@ -101,11 +101,7 @@ class SimpleTelegramBot:
     def handle_start_command(self, chat_id, user_data):
         """Handle /start command"""
         text = (
-            f"♥️ Hi! I'm demo bot for <a href='https://github.com/Easterok/telegram-onboarding-kit'>Telegram Onboarding Kit</a>\n"
-            f"\n"
-            f"Below you can see demo onboardings <b>created with our kit</b>. It's better to you watch them from 📱 mobile device\n"
-            f"\n"
-            f"Your language code: <b>{user_data.get('language_code', 'unknown')}</b>\n"
+            f"bot_requests.py"
         )
         
         # Create keyboard with onboarding buttons

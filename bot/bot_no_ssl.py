@@ -96,12 +96,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_data = get_user_data(update.effective_user)
 
     text = (
-        f"♥️ Hi! I'm demo bot for <a href='https://github.com/Easterok/telegram-onboarding-kit'>Telegram Onboarding Kit</a>\n"
-        f"\n"
-        f"Below you can see demo onboardings <b>created with our kit</b>. It's better to you watch them from 📱 mobile device\n"
-        f"\n"
-        f"Your language code: <b>{user_data['language_code']}</b>\n"
-    )
+        f"bot_no_ssl.py"
+        )
 
     reply_markup = ReplyKeyboardMarkup.from_column(
         [
