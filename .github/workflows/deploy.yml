@@ -2,7 +2,7 @@ name: Deploy App & Bot
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feature/*"]
   workflow_dispatch:
 
 permissions:
