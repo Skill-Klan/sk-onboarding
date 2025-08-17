@@ -355,44 +355,7 @@ jobs:
           # Download deployment status from server
           scp -P ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/deployment-status.txt ./deployment-status.txt 2>/dev/null || echo "No status file found"
           
-          # Check if we have a backup to rollback to
-          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
-            set -e
-            cd /opt/telegram-bot
-            
-            # Find most recent backup
-            LATEST_BACKUP=$(ls -dt backup-* 2>/dev/null | head -n1)
-            
-            if [ -n "$LATEST_BACKUP" ] && [ -d "$LATEST_BACKUP" ]; then
-              echo "🔄 Rolling back to backup: $LATEST_BACKUP"
-              
-              # Stop current bot service
-              sudo systemctl stop telegram-bot || true
-              
-              # Remove failed deployment
-              rm -rf bot
-              
-              # Restore from backup
-              cp -r "$LATEST_BACKUP" bot
-              echo "✅ Rollback completed successfully"
-              
-              # Restart service
-              sudo systemctl start telegram-bot
-              sleep 10
-              
-              # Verify rollback
-              if systemctl is-active --quiet telegram-bot; then
-                echo "✅ Service restored and running after rollback"
-              else
-                echo "⚠️ Warning: Service not active after rollback"
-                systemctl status telegram-bot --no-pager || true
-              fi
-              
-            else
-              echo "❌ No backup found for rollback"
-              echo "Current bot directory contents:"
-              ls -la bot/ || true
-            fi
-          '
+          # Execute rollback script on server
+          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "SERVER_PASSWORD=\"${{ secrets.SERVER_PASSWORD }}\" bash /opt/telegram-bot/bot/rollback.sh"
           
           echo "🔄 Rollback process completed"
