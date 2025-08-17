@@ -10,6 +10,7 @@ import signal
 import sys
 import threading
 import time
+import socket
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime
 
@@ -64,12 +65,37 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
         if '/health' not in args[0]:
             super().log_message(format, *args)
 
-def run_health_server(port=8080):
-    """Run the health check HTTP server"""
-    server = HTTPServer(('localhost', port), HealthCheckHandler)
+def find_free_port(start_port=8080, max_attempts=100):
+    """Find a free port starting from start_port"""
+    for port in range(start_port, start_port + max_attempts):
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('localhost', port))
+                return port
+        except OSError:
+            continue
+    raise RuntimeError(f"Could not find free port in range {start_port}-{start_port + max_attempts}")
+
+def run_health_server(port=None):
+    """Run the health check HTTP server with automatic port finding"""
+    if port is None:
+        port = int(os.getenv("HEALTH_CHECK_PORT", "8081"))
+    
+    # Try to find free port if default is busy
+    try:
+        server = HTTPServer(('localhost', port), HealthCheckHandler)
+        print(f"✅ Health check server started on port {port}")
+    except OSError as e:
+        if "Address already in use" in str(e):
+            print(f"⚠️ Port {port} is busy, searching for free port...")
+            port = find_free_port(port + 1)
+            server = HTTPServer(('localhost', port), HealthCheckHandler)
+            print(f"✅ Health check server started on free port {port}")
+        else:
+            raise e
+    
     server.start_time = time.time()
     
-    print(f"Health check server started on port {port}")
     print(f"Health endpoint: http://localhost:{port}/health")
     print(f"Status endpoint: http://localhost:{port}/status")
     
@@ -80,5 +106,4 @@ def run_health_server(port=8080):
         server.shutdown()
 
 if __name__ == "__main__":
-    port = int(os.getenv("HEALTH_CHECK_PORT", "8081"))
-    run_health_server(port)
+    run_health_server()
