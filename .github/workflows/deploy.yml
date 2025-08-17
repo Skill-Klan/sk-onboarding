@@ -76,8 +76,8 @@ jobs:
         run: |
           ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
             set -e
-            sudo mkdir -p /opt/telegram-bot/bot
-            sudo chown -R $USER:$USER /opt/telegram-bot
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S mkdir -p /opt/telegram-bot/bot
+            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S chown -R $USER:$USER /opt/telegram-bot
             
             # Create backup of current bot version if it exists
             if [ -d "/opt/telegram-bot/bot" ] && [ "$(ls -A /opt/telegram-bot/bot)" ]; then
@@ -356,6 +356,6 @@ jobs:
           scp -P ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/tmp/deployment-status.txt ./deployment-status.txt 2>/dev/null || echo "No status file found"
           
           # Execute rollback script on server
-          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "SERVER_PASSWORD=\"${{ secrets.SERVER_PASSWORD }}\" bash /opt/telegram-bot/bot/rollback.sh"
+          ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "if [ -f /opt/telegram-bot/bot/rollback.sh ]; then SERVER_PASSWORD=\"${{ secrets.SERVER_PASSWORD }}\" bash /opt/telegram-bot/bot/rollback.sh; else echo \"❌ rollback.sh не знайдено, виконую простий rollback\"; cd /opt/telegram-bot; LATEST_BACKUP=$(ls -dt backup-* 2/dev/null | head -n1); if [ -n \"$LATEST_BACKUP\" ]; then echo \"🔄 Відновлюю з $LATEST_BACKUP\"; rm -rf bot; cp -r \"$LATEST_BACKUP\" bot; echo \"✅ Простий rollback завершено\"; else echo \"❌ Backup не знайдено\"; fi; fi"
           
           echo "🔄 Rollback process completed"

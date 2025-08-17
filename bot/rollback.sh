@@ -6,12 +6,12 @@ cd /opt/telegram-bot
 LATEST_BACKUP=$(ls -dt backup-* 2>/dev/null | head -n1)
 if [ -n "$LATEST_BACKUP" ] && [ -d "$LATEST_BACKUP" ]; then
     echo "🔄 Відновлюю з backup: $LATEST_BACKUP"
-    echo "$SUDO_PASS" | sudo -S systemctl stop telegram-bot || true
+    echo "$SERVER_PASSWORD" | sudo -S systemctl stop telegram-bot || true
     sleep 5
     rm -rf bot
     cp -r "$LATEST_BACKUP" bot
     chmod +x bot/*.sh
-    echo "$SUDO_PASS" | sudo -S systemctl start telegram-bot
+    echo "$SERVER_PASSWORD" | sudo -S systemctl start telegram-bot
     sleep 15
     if systemctl is-active --quiet telegram-bot; then
         echo "✅ Сервіс відновлено та працює після rollback"
