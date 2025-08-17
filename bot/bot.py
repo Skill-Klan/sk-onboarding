@@ -47,7 +47,7 @@ load_dotenv()
 
 # Get onboarding URLs from environment variables
 LOCAL_ONBOARDING_URL = os.getenv("LOCAL_ONBOARDING_URL", "http://localhost:3000")
-LOCAL_FAQ_URL = os.getenv("LOCAL_FAQ_URL", "http://localhost:3001")  # Для локального тестування FAQ
+LOCAL_FAQ_URL = os.getenv("LOCAL_FAQ_URL", "https://skill-klan.github.io/sk-onboarding/")  # Для локального тестування FAQ
 BASE_ONBOARDING_URL = os.getenv("BASE_ONBOARDING_URL", "https://easterok.github.io/telegram-onboarding-kit")
 
 
@@ -143,14 +143,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                     )
                 ),
             ),
-            KeyboardButton(
-                text="❓ FAQ",
-                web_app=WebAppInfo(
-                    url=add_get_params_to_url(
-                        LOCAL_FAQ_URL, user_data
-                    )
-                ),
-            ),
+
         ]
     )
 
