@@ -10,7 +10,22 @@ sudo systemctl stop telegram-bot
 # Чекаємо завершення
 sleep 5
 
+# Очищаємо зайві процеси
+echo "🧹 Очищаю зайві процеси..."
+pkill -f "run_with_health_requests.py" || true
+pkill -f "health_check.py" || true
+pkill -f "bot_requests.py" || true
+pkill -f "simple_server.py" || true
+pkill -f "run_with_health.py" || true
+
 # Перевіряємо, чи всі процеси завершилися
+if pgrep -f "run_with_health\|health_check\|bot_requests\|simple_server" > /dev/null; then
+    echo "⚠️ Деякі процеси все ще активні, примусово завершую..."
+    pgrep -f "run_with_health\|health_check\|bot_requests\|simple_server" | xargs -r sudo kill -9
+    sleep 2
+fi
+
+# Перевіряємо порт 8081
 echo "🔍 Перевіряю процеси на порту 8081..."
 if lsof -ti:8081 > /dev/null 2>&1; then
     echo "⚠️ Процеси на порту 8081 все ще активні, примусово завершую..."
@@ -28,7 +43,7 @@ sudo systemctl start telegram-bot
 
 # Чекаємо ініціалізації
 echo "⏳ Чекаю ініціалізації сервісу..."
-sleep 10
+sleep 15
 
 # Перевіряємо статус
 echo "📊 Перевіряю статус сервісу..."

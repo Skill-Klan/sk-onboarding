@@ -14,11 +14,11 @@ Environment=HEALTH_CHECK_PORT=8081
 ExecStartPre=/opt/telegram-bot/bot/cleanup_ports.sh
 ExecStart=/opt/telegram-bot/bot/venv/bin/python3 run_with_health.py
 Restart=always
-RestartSec=10
+RestartSec=15
 StandardOutput=journal
 StandardError=journal
 
-# Security settings
+Security settings
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
