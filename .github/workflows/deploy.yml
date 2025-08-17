@@ -76,8 +76,8 @@ jobs:
         run: |
           ssh -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} '
             set -e
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S mkdir -p /opt/telegram-bot/bot
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S chown -R $USER:$USER /opt/telegram-bot
+            sudo mkdir -p /opt/telegram-bot/bot
+            sudo chown -R $USER:$USER /opt/telegram-bot
             
             # Create backup of current bot version if it exists
             if [ -d "/opt/telegram-bot/bot" ] && [ "$(ls -A /opt/telegram-bot/bot)" ]; then
@@ -192,11 +192,11 @@ jobs:
 
             # Update service file to use new health check functionality
             echo "Updating service file..."
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S cp telegram-bot-enhanced.service /etc/systemd/system/telegram-bot.service
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl daemon-reload
+            sudo cp telegram-bot-enhanced.service /etc/systemd/system/telegram-bot.service
+            sudo systemctl daemon-reload
             
             echo "Restarting service: telegram-bot"
-            echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl restart telegram-bot
+            sudo systemctl restart telegram-bot
             
             # Wait for service to stabilize with progressive checks
             echo "Waiting for service to stabilize..."
@@ -367,7 +367,7 @@ jobs:
               echo "🔄 Rolling back to backup: $LATEST_BACKUP"
               
               # Stop current bot service
-              echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl stop telegram-bot || true
+              sudo systemctl stop telegram-bot || true
               
               # Remove failed deployment
               rm -rf bot
@@ -377,7 +377,7 @@ jobs:
               echo "✅ Rollback completed successfully"
               
               # Restart service
-              echo "${{ secrets.SERVER_PASSWORD }}" | sudo -S systemctl start telegram-bot
+              sudo systemctl start telegram-bot
               sleep 10
               
               # Verify rollback
