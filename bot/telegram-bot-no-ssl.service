@@ -1,5 +1,5 @@
 [Unit]
-Description=Telegram Bot Service (No SSL) with Health Check
+Description=Telegram Bot Service with SSL Completely Disabled and Health Check
 After=network.target
 Wants=network.target
 
@@ -11,10 +11,12 @@ WorkingDirectory=/opt/telegram-bot/bot
 Environment=PATH=/opt/telegram-bot/bot/venv/bin
 Environment=PYTHONPATH=/opt/telegram-bot/bot/venv/lib/python3.12/site-packages
 Environment=HEALTH_CHECK_PORT=8081
-ExecStartPre=/opt/telegram-bot/bot/cleanup_ports.sh
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONHTTPSVERIFY=0
+Environment=CURL_CA_BUNDLE=
 ExecStart=/opt/telegram-bot/bot/venv/bin/python3 run_with_health_no_ssl.py
 Restart=always
-RestartSec=15
+RestartSec=10
 StandardOutput=journal
 StandardError=journal
 
