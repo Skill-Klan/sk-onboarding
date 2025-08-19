@@ -48,9 +48,14 @@ from telegram.ext import (
 load_dotenv()
 
 # Get onboarding URLs from environment variables
-LOCAL_ONBOARDING_URL = os.getenv("LOCAL_ONBOARDING_URL", "http://localhost:3000")
+LOCAL_ONBOARDING_URL = os.getenv("LOCAL_ONBOARDING_URL", "https://skill-klan.github.io/sk-onboarding/")
 LOCAL_FAQ_URL = os.getenv("LOCAL_FAQ_URL", "https://skill-klan.github.io/sk-onboarding/")  # Для локального тестування FAQ
 BASE_ONBOARDING_URL = os.getenv("BASE_ONBOARDING_URL", "https://easterok.github.io/telegram-onboarding-kit")
+
+# Debug: Print loaded URLs
+print(f"DEBUG: LOCAL_ONBOARDING_URL = {LOCAL_ONBOARDING_URL}")
+print(f"DEBUG: LOCAL_FAQ_URL = {LOCAL_FAQ_URL}")
+print(f"DEBUG: BASE_ONBOARDING_URL = {BASE_ONBOARDING_URL}")
 
 # SSL Configuration
 def configure_ssl():
