@@ -95,7 +95,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_data = get_user_data(update.effective_user)
 
     text = (
-        f"bot.py update test"
+        f"привіт друже"
     )
 
     user_data = get_user_data(update.effective_user)
